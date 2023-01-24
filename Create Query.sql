@@ -1,0 +1,52 @@
+CREATE DATABASE Viscount_BookStore
+GO
+USE Viscount_BookStore
+GO
+
+CREATE TABLE Author(
+	AuthorID CHAR(5) PRIMARY KEY NOT NULL,
+	AuthorName VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE Publisher(
+	PublisherID CHAR(5) PRIMARY KEY NOT NULL,
+	PublisherName VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE Book(
+	BookID CHAR(5) PRIMARY KEY NOT NULL,
+	PublisherID CHAR(5) FOREIGN KEY REFERENCES Publisher(PublisherID),
+	AuthorID CHAR(5) FOREIGN KEY REFERENCES Author(AuthorID),
+	BookName VARCHAR(50) NOT NULL,
+	Price INT NOT NULL CHECK(LEN(Price) <= 10)
+)
+
+CREATE TABLE Staff(
+	StaffID CHAR(5) PRIMARY KEY NOT NULL,
+	StaffName VARCHAR(50) NOT NULL,
+	StaffEmail VARCHAR(50) NOT NULL,
+	StaffPhoneNumber VARCHAR (12) NOT NULL,
+	StaffDOB DATE NOT NULL
+)
+
+CREATE TABLE TransactionHeader(
+	TransactionID CHAR(5) PRIMARY KEY NOT NULL,
+	BookID CHAR(5) FOREIGN KEY REFERENCES Book(BookID),
+	StaffID CHAR(5) FOREIGN KEY REFERENCES Staff(StaffID),
+	TransactionDate DATE NOT NULL
+)
+
+CREATE TABLE Customer(
+	CustomerID CHAR(5) PRIMARY KEY NOT NULL,
+	CustomerName VARCHAR(50) NOT NULL,
+	CustomerEmail VARCHAR(50) NOT NULL,
+	CustomerPhoneNumber VARCHAR(12) NOT NULL,
+	CustomerDOB DATE,
+	CustomerAddress VARCHAR(50)
+)
+
+CREATE TABLE TransactionDetail(
+	TransactionID CHAR(5) FOREIGN KEY REFERENCES TransactionHeader(TransactionID),
+	CustomerID CHAR(5) FOREIGN KEY REFERENCES Customer(CustomerID),
+	Quantity INT NOT NULL CHECK(LEN(Quantity) <= 2)
+)
